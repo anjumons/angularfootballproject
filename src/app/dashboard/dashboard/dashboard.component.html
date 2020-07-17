@@ -1,0 +1,134 @@
+<app-nav-bar> </app-nav-bar>
+<div class="dashboard-carousel">
+    <mat-carousel timings="250ms ease-in" [autoplay]="true" interval="5000" color="accent" maxWidth="auto"
+        proportion="25" slides="5" [loop]="true" [hideArrows]="false" [hideIndicators]="false" [useKeyboard]="true"
+        [useMouseWheel]="false" orientation="ltr">
+        <mat-carousel-slide *ngFor="let slide of slides; let i = index" image={{slide}} overlayColor="#black"
+            [hideOverlay]="false">
+        </mat-carousel-slide>
+    </mat-carousel>
+</div>
+<div style="text-align: center;margin-top: 22px;">
+    <mat-form-field>
+        <mat-label>Choose country</mat-label>
+        <mat-select (selectionChange)="getCountryClubs( $event)">
+            <mat-option *ngFor="let country of countries" [value]="country">
+                {{country}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<div *ngIf = "isWait">
+<mat-progress-spinner  style="margin:0 auto;"  mode="indeterminate" color="warn" diameter="40">
+</mat-progress-spinner>
+</div>
+<div *ngIf = "!isWait">
+<div *ngIf="clubSummary?.length>0">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4 " style="margin:17px 0px" *ngFor="let club of clubSummary;let i = index">
+                <div class="card card-flip h-100">
+                    <div class="card-front">
+                        <mat-card class="example-card">
+                            <div [ngClass]="{'apply-card-front': club.isflipped }"
+                                (click)="club.isflipped = !club.isflipped;getClubInfo(club.idTeam,i)">
+                                <img mat-card-image src="{{club.strTeamFanart1}}" alt="Photo of a Shiba Inu">
+                                <mat-card-header>
+                                    <div mat-card-avatar
+                                        [ngStyle]="{ 'background-image': 'url(' + club.strTeamBadge + ')'}"
+                                        class="example-header-image"></div>
+                                    <mat-card-title>{{club.strTeam}}</mat-card-title>
+                                    <mat-card-subtitle> ..</mat-card-subtitle>
+
+                                </mat-card-header>
+                                <mat-card-content>
+                                    <p>
+                                        {{club.strDescriptionEN | slice : 0 :200}}.....
+                                        <!-- <button class="btn btn-right" type="button" >show more</button>
+                                        <i class="fa fa-angle-double-right"></i></button>
+                                </p> -->
+                                </mat-card-content>
+                            </div>
+                            <a (click)="openDialog(club.strDescriptionEN,club.strTeam)"
+                                style="float: right;cursor: pointer; font-size: 13px;color: #7373c3;">show
+                                more</a>
+                            <mat-card-actions>
+                                    <button class="btn " type="button">
+                                        <a (click)="goTourl(club.strFacebook)" class="fa fa-facebook"></a></button>
+                                    <button class="btn " type="button">
+                                        <a (click)="goTourl(club.strTwitter)" class="fa fa-twitter"></a></button>
+                                    <button class="btn " type="button">
+                                        <a (click)="goTourl(club.strWebsite)" class="fa fa-google"></a></button>
+
+                                </mat-card-actions>
+                        </mat-card>
+                    </div>
+                    <div class="card-back bg-white" [ngClass]="{'apply-card-back': club.isflipped }"
+                        (click)="club.isflipped = !club.isflipped;">
+                        <div class="card-body">
+                            <h5 class="card-title" style="color: #621e8c;">{{club.name}}</h5>
+                            <!-- <p class="card-text"> -->
+                            <div class="center-container">
+                                <table *ngIf="club.played">
+                                    <tr>
+                                        <td class="tr-heading">played</td>
+                                        <td class="tr-content">{{club.played}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tr-heading">goals against</td>
+                                        <td class="tr-content">{{club.goalsagainst}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tr-heading">goals difference</td>
+                                        <td class="tr-content">{{club.goalsdifference}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tr-heading">goals for</td>
+                                        <td class="tr-content">{{club.goalsfor}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tr-heading">win</td>
+                                        <td class="win">{{club.win}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tr-heading">draw</td>
+                                        <td class="tr-content">{{club.draw}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tr-heading">loss</td>
+                                        <td class="loss">{{club.loss}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tr-heading">total</td>
+                                        <td class="tr-content">{{club.total}}</td>
+                                    </tr>
+                                </table>
+                                <p *ngIf="!club.played" style="color: #621e8c;"> no data found</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="clubSummary?.length==0" class="center-container">
+    no record found
+</div>
+</div>
+<ng-template #clubDescription>
+    <h1 mat-dialog-title>{{selectedTitle}}</h1>
+    <div mat-dialog-content>
+        <!-- <p>What's your favorite animal?</p>
+        <mat-form-field>
+            <mat-label>Favorite Animal</mat-label>
+            <input matInput>
+        </mat-form-field> -->
+        {{selectedDesc}}
+    </div>
+    <div mat-dialog-actions>
+        <!-- <button mat-button>No Thanks</button> -->
+        <button mat-button mat-dialog-close cdkFocusInitial>Ok</button>
+    </div>
+
+</ng-template>

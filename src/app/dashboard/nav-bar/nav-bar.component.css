@@ -1,0 +1,9 @@
+.logo-border{
+    border-radius: 30px !important;;
+}
+.menu-spacer{
+    flex: 1 1 auto;
+}
+.mat-toolbar{
+    background:#53346b;
+}
