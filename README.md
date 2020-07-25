@@ -1,6 +1,5 @@
 # Featuredgames
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.3.
+This is a simple Angular 8 project which is used to get the game score of football matches based on the football leagues and clubs.
 
 ## Development server
 
